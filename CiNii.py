@@ -7,12 +7,12 @@
 
 import json
 
+
 class CiNii:
     def __init__(self):
         self.name = ""
 
-
-    def get_article_title_from_dict(self, json_d):
+    def get_title_from_dict(self, json_d):
         title = json_d['@graph'][0]['dc:title'][0]['@value']
         return title
 
