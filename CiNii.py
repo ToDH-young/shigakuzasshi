@@ -23,14 +23,6 @@ class CiNii:
             title_complete = title
         return title_complete
 """
-    def modify_title_data(title):
-        if '書評' in title:
-            title_complete = title.replace('書評', '*')
-        else:
-            title_complete = title
-        return title_complete
-
-
     def get_atricle_published_year_month(json_dict):
         date = json_dict['@graph'][0]['prism:publicationDate']
         return date
