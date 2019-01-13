@@ -13,8 +13,15 @@ class CiNii:
 
 
     def get_article_title_from_dict(self, json_d):
-            title = json_d['@graph'][0]['dc:title'][0]['@value']
-            return title
+        title = json_d['@graph'][0]['dc:title'][0]['@value']
+        return title
+
+    def modify_title_data(self, title):
+        if '書評' in title:
+            title_complete = title.replace('書評', '*')
+        else:
+            title_complete = title
+        return title_complete
 """
     def modify_title_data(title):
         if '書評' in title:
