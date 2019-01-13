@@ -1,1 +1,1 @@
-# 史学雑誌プロジェクト
+# shigakuzasshi

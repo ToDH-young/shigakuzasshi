@@ -1,0 +1,84 @@
+{
+"@context": {
+"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+"dc": "http://purl.org/dc/elements/1.1/",
+"dcterms": "http://purl.org/dc/terms/",
+"foaf": "http://xmlns.com/foaf/0.1/",
+"prism": "http://prismstandard.org/namespaces/basic/2.0/",
+"con": "http://www.w3.org/2000/10/swap/pim/contact#",
+"cinii": "http://ci.nii.ac.jp/ns/1.0/",
+"bibo": "http://purl.org/ontology/bibo/"
+},
+"@id": "https://ci.nii.ac.jp/naid/40021719192.json",
+"@graph": [
+{
+"@id": "https://ci.nii.ac.jp/naid/40021719192#article",
+"@type":"bibo:Article",
+"foaf:isPrimaryTopicOf": {
+"@id": "https://ci.nii.ac.jp/naid/40021719192.json"
+},
+"dc:title": [
+{
+"@value": "書評 仲松優子著『アンシアン・レジーム期フランスの権力秩序 : 蜂起をめぐる地域社会と王権』"
+},
+{
+"@value": "Reviews : NAKAMATSU Yuko, Political power in France under the Ancien Regime : Regional society and kingship in the midst of peasant uprisings, Tokyo, 2017",
+"@language": "en"
+}
+],
+"dc:creator": [
+[
+{
+"@value": "山﨑 耕一"
+}
+]
+],
+"dc:publisher": [
+{
+"@value": "史学会 ; 1889-"
+}
+],
+"prism:publicationName": [
+{
+"@value": "史学雑誌"
+}
+],
+"prism:issn": "0018-2478",
+"prism:volume": "127",
+"prism:number": "10",
+"prism:startingPage": "1630",
+"prism:endingPage": "1636",
+"prism:publicationDate": "2018-10",
+"dc:date": "2018-10",
+"cinii:naid": "40021719192",
+"cinii:ncid": "AN0010024X",
+"cinii:ndljpi": "029334881",
+"dc:language": "JPN",
+"dc:source": [
+{
+"@value": "NDL"
+}
+],
+"dcterms:isPartOf": {
+"@id": "https://ci.nii.ac.jp/ncid/AN0010024X#entity",
+"dc:title": "史学雑誌"
+},
+"rdfs:seeAlso": [
+{
+"@id": "http://id.ndl.go.jp/bib/029334881",
+"dc:title": "NDL ONLINE"}
+],
+"foaf:maker": [
+{
+"@id": "https://ci.nii.ac.jp/nrid/9000398958796#me",
+"@type": "foaf:Person",
+"foaf:name": [
+{
+"@value": "山﨑 耕一"
+}
+]
+}
+]
+}
+]
+}
