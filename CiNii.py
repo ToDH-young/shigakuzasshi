@@ -12,8 +12,8 @@ class CiNii:
     def __init__(self):
         self.name = ""
 
-    def get_title_from_dict(self, json_d):
-        title = json_d['@graph'][0]['dc:title'][0]['@value']
+    def get_title_from_dict(self, json_dict):
+        title = json_dict['@graph'][0]['dc:title'][0]['@value']
         return title
 
     def modify_title_data(self, title):
@@ -22,11 +22,14 @@ class CiNii:
         else:
             title_complete = title
         return title_complete
-"""
-    def get_atricle_published_year_month(json_dict):
+
+    def get_article_published_year_month(self, json_dict):
         date = json_dict['@graph'][0]['prism:publicationDate']
         return date
 
+
+"""
+    
     def modify_published_year_month(date):
         if '-' in date:
             splited_date = date.split('-')
