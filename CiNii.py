@@ -39,6 +39,21 @@ class CiNii:
         date_complete = f'{year}-{month}'
         return date_complete
 
+    def get_article_authors(self, json_dict):
+        author = json_dict['@graph'][0]
+        if 'dc:creator' in author.keys():
+            authors = author['dc:creator'][0][0]['@value']
+        else:
+            authors = '------'
+        return authors
+
+    def modify_authors_data(self, authors):
+        if '/' in authors:
+            authors_complete = authors.replace('/', '・')
+        else:
+            authors_complete = authors
+        return authors_complete
+
 """
 
     def get_article_authors(json_dict):
