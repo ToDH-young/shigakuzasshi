@@ -27,10 +27,7 @@ class CiNii:
         date = json_dict['@graph'][0]['prism:publicationDate']
         return date
 
-
-"""
-    
-    def modify_published_year_month(date):
+    def modify_published_year_month(self, date):
         if '-' in date:
             splited_date = date.split('-')
             year = splited_date[0]
@@ -38,9 +35,11 @@ class CiNii:
             month = splited_date[1]
         else:
             year = date
-                month = '---'
-            date_complete = f'{year}-{month}'
-            return date_complete
+            month = '---'
+        date_complete = f'{year}-{month}'
+        return date_complete
+
+"""
 
     def get_article_authors(json_dict):
         author = json_dict['@graph'][0]
