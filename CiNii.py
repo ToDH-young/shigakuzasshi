@@ -23,7 +23,7 @@ class CiNii:
             title_complete = title
         return title_complete
 
-    def get_article_published_year_month(self, json_dict):
+    def get_published_year_month(self, json_dict):
         date = json_dict['@graph'][0]['prism:publicationDate']
         return date
 
@@ -39,7 +39,7 @@ class CiNii:
         date_complete = f'{year}-{month}'
         return date_complete
 
-    def get_article_authors(self, json_dict):
+    def get_authors(self, json_dict):
         author = json_dict['@graph'][0]
         if 'dc:creator' in author.keys():
             authors = author['dc:creator'][0][0]['@value']
@@ -54,22 +54,10 @@ class CiNii:
             authors_complete = authors
         return authors_complete
 
+
+
 """
 
-    def get_article_authors(json_dict):
-        author = json_dict['@graph'][0]
-        if 'dc:creator' in author.keys():
-            authors = author['dc:creator'][0][0]['@value']
-        else:
-            authors = '------'
-        return authors
-
-    def modify_authors_data(authors):
-        if '/' in authors:
-            authors_complete = authors.replace('/', '・')
-        else:
-            authors_complete = authors
-        return authors_complete
 
     def get_journal_title(json_dict):
         j_title = json_dict['@graph'][0]['prism:publicationName'][0]['@value']
