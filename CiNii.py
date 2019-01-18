@@ -54,22 +54,22 @@ class CiNii:
             authors_complete = authors
         return authors_complete
 
+    def get_journal_title(self, json_dict):
+        j_title = json_dict['@graph'][0]['prism:publicationName'][0]['@value']
+        return j_title
 
+    def modify_journal_title(self, j_title):
+        if '=' in j_title:
+            split_j_title = j_title.split('=')
+            j_title_complete = split_j_title[0]
+        else:
+            j_title_complete = j_title
+        return j_title_complete
 
 """
 
 
-    def get_journal_title(json_dict):
-        j_title = json_dict['@graph'][0]['prism:publicationName'][0]['@value']
-        return j_title
 
-    def modify_journal_title(j_title):
-        if '=' in j_title:
-            splited_j_title = j_title.split('=')
-            j_title_complete = splited_j_title[0]
-        else:
-            j_title_complete = j_title
-        return j_title_complete
 
     def get_article_volume(json_dict):
         raw_volume = json_dict['@graph'][0]
