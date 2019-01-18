@@ -66,18 +66,19 @@ class CiNii:
             j_title_complete = j_title
         return j_title_complete
 
-"""
-
-
-
-
-    def get_article_volume(json_dict):
+    def get_article_volume(self, json_dict):
         raw_volume = json_dict['@graph'][0]
         if 'prism:number' in raw_volume.keys():
             volume = raw_volume['prism:number']
         else:
             volume = '------'
         return volume
+"""
+
+
+
+
+
 
     def get_start_page(json_dict):
         raw_startingpage = json_dict['@graph'][0]
