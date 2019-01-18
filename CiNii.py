@@ -6,7 +6,7 @@
 """
 
 import json
-
+import requests
 
 class CiNii:
     def __init__(self):
