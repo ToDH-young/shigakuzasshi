@@ -73,20 +73,15 @@ class CiNii:
         else:
             volume = '------'
         return volume
-"""
 
-
-
-
-
-
-    def get_start_page(json_dict):
+    def get_start_page(self, json_dict):
         raw_startingpage = json_dict['@graph'][0]
         if 'prism:startingPage' in raw_startingpage.keys():
             startingpage = raw_startingpage['prism:startingPage']
         else:
             startingpage = '------'
         return startingpage
+"""
 
     def get_end_page(json_dict):
         raw_endingpage = json_dict['@graph'][0]
