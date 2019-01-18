@@ -81,15 +81,17 @@ class CiNii:
         else:
             startingpage = '------'
         return startingpage
-"""
 
-    def get_end_page(json_dict):
+    def get_end_page(self, json_dict):
         raw_endingpage = json_dict['@graph'][0]
         if 'prism:endingPage' in raw_endingpage.keys():
             endingpage = raw_endingpage['prism:endingPage']
         else:
             endingpage = '------'
         return endingpage
+
+"""
+
 
     def fetch_and_convert_json_to_dict(url):
         response = requests.get(url)
