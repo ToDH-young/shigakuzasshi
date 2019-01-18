@@ -12,6 +12,11 @@ class CiNii:
     def __init__(self):
         self.name = ""
 
+    def fetch_and_convert_json_to_dict(self, url):
+        response = requests.get(url)
+        json_dictionary = json.loads(response.text)
+        return json_dictionary
+
     def get_title_from_dict(self, json_dict):
         title = json_dict['@graph'][0]['dc:title'][0]['@value']
         return title
@@ -93,10 +98,7 @@ class CiNii:
 """
 
 
-    def fetch_and_convert_json_to_dict(url):
-        response = requests.get(url)
-        json_dictionary = json.loads(response.text)
-        return json_dictionary
+    
 
     def get_urls_from_json_dict(jd):
         urls = []
