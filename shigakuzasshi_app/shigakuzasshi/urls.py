@@ -6,8 +6,11 @@ Created on Tue Mar 19 19:55:32 2019
 """
 
 from django.conf.urls import url
-from .views import ShigakuzasshiView
+from django.urls import path
+from .views import ShigakuzasshiView_articles
+from .views import ShigakuzasshiView_books
 
 urlpatterns = [
-        url(r'', ShigakuzasshiView.as_view(), name='index'),
+        path('', ShigakuzasshiView_articles.as_view(), name='articles'),
+        path('books', ShigakuzasshiView_books.as_view(), name="books")
 ]
