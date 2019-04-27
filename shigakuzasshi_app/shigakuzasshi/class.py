@@ -36,23 +36,22 @@ class CiNii:
             sleep(1.5)
         return item_list
 
-
     def formatting(self, json_dict):
         authors = modify_author_data(json_dict['authors'])
-        title = modify_title_data(json_dict['article_title'])
-        journal_title = modify_journal_title(json_dict['journal_title'])
-        volume = json_dict['volume']
-        startPage = json_dict['startPage']
-        endPage = json_dict['endPage']
-        year_month = modify_published_year_month(json_dict['year_month'])
+        article_title = modify_title_data(json_dict['article_title']) if 'article_title' in json_dict else ''
+        journal_title = modify_journal_title(json_dict['journal_title']) if 'journal_title' in json_dict else ''
+        volume = json_dict['volume'] if 'volume' in json_dict else ''
+        startPage = json_dict['startPage'] if 'startPage' in json_dict else ''
+        endPage = json_dict['endPage'] if 'endPage' in json_dict else ''
+        year_month = modify_published_year_month(json_dict['year_month']) if 'year_month' in json_dict else ''
 
         result = {
-            'authors':authors,
-            'title':title,
-            'journal_title':journal_title,
-            'volume':volume,
-            'startPage':startPage,
-            'endPage':endPage,
-            'year_month':year_month
+            'authors': authors,
+            'article_title': article_title,
+            'journal_title': journal_title,
+            'volume': volume,
+            'startPage': startPage,
+            'endPage': endPage,
+            'year_month': year_month
         }
         return result
