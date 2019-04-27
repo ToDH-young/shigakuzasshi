@@ -21,26 +21,21 @@ class CiNii:
         self.since = since
         self.until = until
 
-    def search_article(self):
-        article_list = []
+    def search(self):
+        item_list = []
         # url生成、ここではtarget_listにissnが格納されていると考える。
         for item in self.target_list:
-            url = f"{self.api_url_for_article}issn={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
-            article_dict = fetch_and_convert_json_to_dict(url)
-            article_result = self.formatting(article_dict)
-            article_list.append(article_result)
-            sleep(1.5)
-        return article_list
+            if self.resource_type == 'articles':
+                url = f"{self.api_url_for_article}issn={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
+            else:
+                url = f"{self.api_url_for_books}publisher={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
 
-    def search_books(self):
-        book_list = []
-        for item in self.target_list:
-            url = f"{self.api_url_for_books}publisher={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
-            book_dict = fetch_and_convert_json_to_dict(url)
-            book_result = self.formatting(book_dict)
-            book_list.append(book_result)
+            response_dict = fetch_and_convert_json_to_dict(url)
+            result = self.formatting(response_dict)
+            item_list.append(result)
             sleep(1.5)
-        return book_list
+        return item_list
+
 
     def formatting(self, json_dict):
         authors = modify_author_data(json_dict['authors'])
