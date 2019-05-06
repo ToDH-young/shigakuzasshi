@@ -30,7 +30,7 @@ class CiNii:
             else:
                 url = f"{self.api_url_for_books}publisher={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
 
-            src = fetch_and_convert_json_to_dict(url)  # TODO: formattingはまだarticle前提になっているので、書籍に対応できるように修正
+            src = fetch_and_convert_json_to_dict(url)
             result = self.formatting(src)
             result['publisher'] = item
             item_list.append(result)
