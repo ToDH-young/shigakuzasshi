@@ -17,67 +17,67 @@ def make_publisher_dict(publisher_list):
     url_dict = {publisher: url_format.format(publisher=publisher) for publisher in publisher_list}
     return url_dict
 
-
 def fetch_and_convert_json_to_dict(url):
     response = requests.get(url)
     json_dictionary = json.loads(response.text)
-    return json_dictionary
+    src = json_dictionary['@graph'][0]
+    return src
 
-def get_title_from_dict(json_dict):
-    title = json_dict['@graph'][0]['dc:title'][0]['@value']
-    return title
 
-def modify_title_data(title):
-    if '書評' in title:
-        title_complete = title.replace('書評', '*')
+def get_title_data(src):
+    title = src['dc:title'][0]['@value']
+    if title:
+        if '書評' in title:
+            title_complete = title.replace('書評', '*')
+        else:
+            title_complete = title
     else:
-        title_complete = title
+        title_complete = ""
     return title_complete
 
-def get_published_year_month(json_dict):
-    date = json_dict['@graph'][0]['prism:publicationDate']
-    return date
 
-def modify_published_year_month(date):
-    if '-' in date:
-        splited_date = date.split('-')
-        year = splited_date[0]
-        year = year.replace('20', '')
-        month = splited_date[1]
+def get_published_date_data(src):
+    date = src.get('prism:publicationDate')
+    if date:
+        if '-' in date:
+            splited_date = date.split('-')
+            year = splited_date[0]
+            year = year.replace('20', '')
+            month = splited_date[1]
+        else:
+            year = date
+            month = '---'
+        date_complete = f'{year}-{month}'
     else:
-        year = date
-        month = '---'
-    date_complete = f'{year}-{month}'
+        date_complete = ''
     return date_complete
 
-def get_authors(json_dict):
-    author = json_dict['@graph'][0]
-    if 'dc:creator' in author.keys():
-        authors = author['dc:creator'][0][0]['@value']
-    else:
-        authors = '------'
-    return authors
 
-def modify_author_data(author_data):
-    if 'dc:creator' in author_data.keys():
-        author_data = author_data['dc:creator']
-        if "," in author_data:
-            author_data = author_data.replace(', ', '・')
-        else:
-            pass
-        if '著' in author_data:
-            author_data = author_data.replace('著', '')
-        else:
-            pass
+def get_authors_data(src):
+    if src.get('dc:creator') and isinstance(src.get('dc:creator'), list):
+        authors_list = src['dc:creator']
+        author_array = [author[0]['@value'] for author in authors_list]
+    elif src.get('dc:creator'):
+        author_array = [src.get('dc:creator')]
+    else:
+        author_array = []
+    authors = '・'.join(author_array)
+    if authors and "," in authors:
+        authors = authors.replace(', ', '・')
+    if authors and '著' in authors:
+        authors = authors.replace('著', '')
     else:
         return ""
-    return author_data
+    return authors
 
-def get_journal_title(json_dict):
-    j_title = json_dict['@graph'][0]['prism:publicationName'][0]['@value']
-    return j_title
 
-def modify_journal_title(j_title):
+def modify_author_data(authors):
+
+    return authors
+
+
+def get_journal_title_data(src):
+    j_title = src['prism:publicationName'][0]['@value']
     if '=' in j_title:
         split_j_title = j_title.split('=')
         j_title_complete = split_j_title[0]
@@ -85,34 +85,37 @@ def modify_journal_title(j_title):
         j_title_complete = j_title
     return j_title_complete
 
-def get_article_volume(json_dict):
-    raw_volume = json_dict['@graph'][0]
-    if 'prism:number' in raw_volume.keys():
-        volume = raw_volume['prism:number']
+
+def get_article_volume(src):
+    if src.get('prism:volume'):
+        volume = src['prism:volume']
     else:
         volume = '------'
     return volume
 
-def get_start_page(json_dict):
-    raw_startingpage = json_dict['@graph'][0]
-    if 'prism:startingPage' in raw_startingpage.keys():
-        startingpage = raw_startingpage['prism:startingPage']
-    else:
-        startingpage = '------'
-    return startingpage
 
-def get_end_page(json_dict):
-    raw_endingpage = json_dict['@graph'][0]
-    if 'prism:endingPage' in raw_endingpage.keys():
-        endingpage = raw_endingpage['prism:endingPage']
+def get_start_page(src):
+    if src.get('prism:startingPage'):
+        starting_page = src['prism:startingPage']
     else:
-        endingpage = '------'
-    return endingpage
+        starting_page = '------'
+    return starting_page
+
+
+def get_end_page(src):
+    if src.get('prism:endingPage'):
+        ending_page = src['prism:endingPage']
+    else:
+        ending_page = '------'
+    return ending_page
+
 
 def fetch_and_convert_json_to_dict(url):
     response = requests.get(url)
     json_dictionary = json.loads(response.text)
-    return json_dictionary
+    src = json_dictionary['@graph'][0]
+    return src
+
 
 def get_urls_from_json_dict(jd):
     urls = []
@@ -127,27 +130,29 @@ def get_urls_from_json_dict(jd):
         pass
     return urls
 
-def get_isbn_from_dict(raw_isbn):
-    if 'dcterms:hasPart' in raw_isbn.keys():
-        raw_isbn = raw_isbn['dcterms:hasPart'][0]['@id']
+
+def get_isbn_from_dict(src):
+    if src.get('dcterms:hasPart'):
+        raw_isbn = src['dcterms:hasPart'][0]['@id']
         isbn_data = raw_isbn.replace('urn:isbn:', '')
         return isbn_data
     else:
         return ""
 
-def isbn_check():
-    past_data = open(sys.argv[2], mode='r', encoding='utf-8')
-    tsv_reader = csv.reader(past_data, delimiter='\t')
-    repetition_count = 0
-    isbn = get_isbn_from_dict(raw_isbn)
-    for row in tsv_reader:
-        past_isbn = row[13]
-        if isbn == past_isbn:
-            repetition_count += 1
-        else:
-            pass
-    past_data.close()
-    if repetition_count == 0:
-        return repetition_count
-    else:
-        pass
+
+#def isbn_check():
+#    past_data = open(sys.argv[2], mode='r', encoding='utf-8')
+#    tsv_reader = csv.reader(past_data, delimiter='\t')
+#    repetition_count = 0
+#    isbn = get_isbn_from_dict(raw_isbn)
+#    for row in tsv_reader:
+#        past_isbn = row[13]
+#        if isbn == past_isbn:
+#            repetition_count += 1
+#        else:
+#            pass
+#    past_data.close()
+#    if repetition_count == 0:
+#        return repetition_count
+#    else:
+#        pass

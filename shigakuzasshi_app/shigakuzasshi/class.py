@@ -30,28 +30,32 @@ class CiNii:
             else:
                 url = f"{self.api_url_for_books}publisher={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
 
-            response_dict = fetch_and_convert_json_to_dict(url)
-            result = self.formatting(response_dict)
+            src = fetch_and_convert_json_to_dict(url)  # TODO: formattingはまだarticle前提になっているので、書籍に対応できるように修正
+            result = self.formatting(src)
+            result['publisher'] = item
             item_list.append(result)
             sleep(1.5)
         return item_list
 
-    def formatting(self, json_dict):
-        authors = modify_author_data(json_dict['authors'])
-        article_title = modify_title_data(json_dict['article_title']) if 'article_title' in json_dict else ''
-        journal_title = modify_journal_title(json_dict['journal_title']) if 'journal_title' in json_dict else ''
-        volume = json_dict['volume'] if 'volume' in json_dict else ''
-        startPage = json_dict['startPage'] if 'startPage' in json_dict else ''
-        endPage = json_dict['endPage'] if 'endPage' in json_dict else ''
-        year_month = modify_published_year_month(json_dict['year_month']) if 'year_month' in json_dict else ''
+    def formatting(self, src):
+        authors = get_authors_data(src)
+        title = get_title_data(src)
+        journal_title = get_journal_title_data(src)
+        volume = get_article_volume(src)
+        startPage = src['startPage'] if 'startPage' in src else ''
+        endPage = src['endPage'] if 'endPage' in src else ''
+        year_month = get_published_date_data(src)
+        isbn = get_isbn_from_dict(src)
 
         result = {
             'authors': authors,
-            'article_title': article_title,
+            'title': title,
             'journal_title': journal_title,
+            'publisher': '',
             'volume': volume,
             'startPage': startPage,
             'endPage': endPage,
-            'year_month': year_month
+            'year_month': year_month,
+            'isbn': isbn
         }
         return result
