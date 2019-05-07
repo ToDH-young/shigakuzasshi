@@ -36,7 +36,7 @@ class CiNii:
             if self.resource_type == 'articles':
                 result_string = formatting_article_object(result)
             else:
-                result_string = formatting_book_object(result_string)
+                result_string = formatting_book_object(result)
             item_list.append(result_string)
             sleep(1.5)
         return item_list
