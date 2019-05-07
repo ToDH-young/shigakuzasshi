@@ -6,7 +6,6 @@ import requests
 import re
 import sys
 import csv
-import gspread
 import json
 import oauth2client.client
 from typing import Any
