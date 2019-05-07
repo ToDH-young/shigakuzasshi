@@ -8,8 +8,9 @@ viewsでは、article部分でインスタンス生成→.search_article、book�
 formattingではjsonを渡して整形、それをマッピングし返す
 """
 
-from .config import *
-from .utils import *
+from .config import ARTICLE_API, BOOK_API, PUBLISHERS
+from .utils import get_authors_data, get_title_data, get_journal_title_data, get_article_volume, get_published_date_data, get_isbn_from_dict
+from time import sleep
 
 class CiNii:
     def __init__(self, resource_type, target_list, since, until):
