@@ -8,6 +8,7 @@
 </head>
 <body>
     <h1>{{title}}</h1>
+    <div>
     <p>{{msg|linebreaksbr}}</p>
     <table>
     <form action="{% url top %}" method="post">
@@ -16,6 +17,13 @@
         <tr><td></td><td><input type="submit" value="click"></td></tr>
     </form>
     </table>
-    <p><a = href="{% url goto %}">{{goto}}</a></p>
+    <p><a href="{% url goto %}">{{goto}}</a></p>
+    </div>
+    <p>検索結果</p>
+    <div class="result_body">
+        {%　for item in result　%}
+        <ul>{{　item　}}</ul>
+        {%　endfor　%}
+    </div>
 </body>
 </html>

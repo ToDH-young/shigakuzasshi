@@ -47,7 +47,11 @@ class ShigakuzasshiView_articles(TemplateView):
         result = instance.search()
         self.params['msg'] = message
         self.params['form'] = ShigakuzasshiForm_articles(request.POST)
+<<<<<<< HEAD
         self.params['output'] = result
+=======
+        self.params['result'] = result
+>>>>>>> af67e37bf7b690dc604732e84453cb2fffefb8b5
         return render(request, 'shigakuzasshi/index.html', self.params)
 
 
@@ -60,7 +64,11 @@ class ShigakuzasshiView_books(TemplateView):
             'form': ShigakuzasshiForm_books(),
             'goto': 'articles',
             'top': 'books',
+<<<<<<< HEAD
             'output': 'ここに結果が表示されます。',
+=======
+            'output': '検索結果'
+>>>>>>> af67e37bf7b690dc604732e84453cb2fffefb8b5
         }
 
     def get(self, request):

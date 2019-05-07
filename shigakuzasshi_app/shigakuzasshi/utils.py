@@ -19,14 +19,17 @@ def make_publisher_dict(publisher_list):
 
 
 def fetch_and_convert_json_to_dict(url):
-    response = requests.get(url)
-    json_dictionary = json.loads(response.text)
-    src = json_dictionary['@graph'][0]
-    return src
+    response = requests.get(url).text
+    json_dictionary = json.loads(response)
+    src_list = json_dictionary['@graph'][0]['items']
+    return src_list
 
 
 def get_title_data(src):
-    title = src['dc:title'][0]['@value']
+    if src.get('dc:title'):
+        title = src['dc:title'][0]['@value']
+    else:
+        title = src.get('title')
     if title:
         if '書評' in title:
             title_complete = title.replace('書評', '*')
@@ -55,11 +58,11 @@ def get_published_date_data(src):
 
 
 def get_authors_data(src):
-    if src.get('dc:creator') and isinstance(src.get('dc:creator'), list):
+    if src.get('dc:creator') and isinstance(src.get('dc:creator'), list) and len(src.get('dc:creator')) > 0:
         authors_list = src['dc:creator']
-        author_array = [author[0]['@value'] for author in authors_list]
+        author_array = [author['@value'] for author in authors_list]
     elif src.get('dc:creator'):
-        author_array = [src.get('dc:creator')]
+        author_array = [src.get('dc:creator')[0]]
     else:
         author_array = []
     authors = '・'.join(author_array)
@@ -67,8 +70,6 @@ def get_authors_data(src):
         authors = authors.replace(', ', '・')
     if authors and '著' in authors:
         authors = authors.replace('著', '')
-    else:
-        return ""
     return authors
 
 
@@ -78,7 +79,11 @@ def modify_author_data(authors):
 
 
 def get_journal_title_data(src):
-    j_title = src['prism:publicationName'][0]['@value']
+    if isinstance(src.get('prism:publicationName'), list):
+        j_title = src['prism:publicationName'][0]['@value']
+    else:
+        j_title = src['prism:publicationName']
+
     if j_title and '=' in j_title:
         split_j_title = j_title.split('=')
         j_title_complete = split_j_title[0]

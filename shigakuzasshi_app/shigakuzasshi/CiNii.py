@@ -14,7 +14,7 @@ from .utils import get_authors_data, get_title_data, get_journal_title_data, get
 from .config import PUBLISHERS, ARTICLE_API, BOOK_API
 from .utils import fetch_and_convert_json_to_dict, formatting_book_object, formatting_article_object, get_authors_data
 from .utils import get_isbn_from_dict, get_journal_title_data, get_title_data, get_article_volume, get_published_date_data
-
+from .utils import get_start_page, get_end_page
 from time import sleep
 
 class CiNii(object):
@@ -32,18 +32,19 @@ class CiNii(object):
         # url生成、ここではtarget_listに論文の場合issn、書籍の場合出版社名が格納されているとする
         for item in self.target_list:
             if self.resource_type == 'articles':
-                url = f"{self.api_url_for_article}issn={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
+                url = f"{self.api_url_for_article}issn={item}&year_from={self.since}&year_to={self.until}&{self.result_format}&count=100&sortorder=1"
             else:
-                url = f"{self.api_url_for_books}publisher={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
+                url = f"{self.api_url_for_books}publisher={item}&year_from={self.since}&year_to={self.until}&{self.result_format}&count=200&sortorder=1"
 
-            src = fetch_and_convert_json_to_dict(url)
-            result = self.formatting(src)
-            result['publisher'] = item
-            if self.resource_type == 'articles':
-                result_string = formatting_article_object(result)
-            else:
-                result_string = formatting_book_object(result)
-            item_list.append(result_string)
+            src_list = fetch_and_convert_json_to_dict(url)
+            for src in src_list:
+                result = self.formatting(src)
+                result['publisher'] = item
+                if self.resource_type == 'articles':
+                    result_string = formatting_article_object(result)
+                else:
+                    result_string = formatting_book_object(result)
+                item_list.append(result_string)
             sleep(1.5)
         return item_list
 
@@ -52,8 +53,8 @@ class CiNii(object):
         title = get_title_data(src)
         journal_title = get_journal_title_data(src)
         volume = get_article_volume(src)
-        startPage = src['startPage'] if 'startPage' in src else ''
-        endPage = src['endPage'] if 'endPage' in src else ''
+        startPage = get_start_page(src)
+        endPage = get_end_page(src)
         year_month = get_published_date_data(src)
         isbn = get_isbn_from_dict(src)
 
