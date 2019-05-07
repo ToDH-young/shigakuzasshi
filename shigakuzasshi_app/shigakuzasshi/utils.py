@@ -12,10 +12,12 @@ import oauth2client.client
 from typing import Any
 from time import sleep
 
+
 def make_publisher_dict(publisher_list):
     url_format = "https://ci.nii.ac.jp/books/opensearch/search?publisher={publisher}&year_from=2018&q=&format=json"
     url_dict = {publisher: url_format.format(publisher=publisher) for publisher in publisher_list}
     return url_dict
+
 
 def fetch_and_convert_json_to_dict(url):
     response = requests.get(url)
@@ -110,13 +112,6 @@ def get_end_page(src):
     return ending_page
 
 
-def fetch_and_convert_json_to_dict(url):
-    response = requests.get(url)
-    json_dictionary = json.loads(response.text)
-    src = json_dictionary['@graph'][0]
-    return src
-
-
 def get_urls_from_json_dict(jd):
     urls = []
     articles = jd['@graph'][0]
@@ -153,7 +148,8 @@ def formatting_book_object(result):
         {result["year_month"]}{t}""{t}""{t}""{t}""{t}""{t}{result["isbn"]}'
     return result
 
-#def isbn_check():
+
+# def isbn_check():
 #    past_data = open(sys.argv[2], mode='r', encoding='utf-8')
 #    tsv_reader = csv.reader(past_data, delimiter='\t')
 #    repetition_count = 0

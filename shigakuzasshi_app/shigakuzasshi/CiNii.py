@@ -8,8 +8,14 @@ viewsでは、article部分でインスタンス生成→.search_article、book�
 formattingではjsonを渡して整形、それをマッピングし返す
 """
 
+<<<<<<< HEAD
 from .config import ARTICLE_API, BOOK_API, PUBLISHERS
 from .utils import get_authors_data, get_title_data, get_journal_title_data, get_article_volume, get_published_date_data, get_isbn_from_dict
+=======
+from .config import PUBLISHERS, ARTICLE_API, BOOK_API
+from .utils import fetch_and_convert_json_to_dict, formatting_book_object, formatting_article_object, get_authors_data
+from .utils import get_isbn_from_dict, get_journal_title_data, get_title_data, get_article_volume, get_published_date_data
+>>>>>>> f3f2e2bc617cdffb8865c4a2011eb842658f5b06
 from time import sleep
 
 class CiNii:

@@ -33,6 +33,3 @@ class ShigakuzasshiForm_books(forms.Form):
         ]
     year = forms.MultipleChoiceField(label='year', choices=data1, widget=forms.SelectMultiple(attrs={'size': 5}))
     choice = forms.MultipleChoiceField(label='publisher', choices=data2, widget=forms.SelectMultiple(attrs={'size': 3}))
-
-
-    
