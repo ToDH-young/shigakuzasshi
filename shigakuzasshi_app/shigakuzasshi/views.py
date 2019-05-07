@@ -42,8 +42,8 @@ class ShigakuzasshiView_articles(TemplateView):
         year = request.POST.getlist('year')
         ch = request.POST.getlist('choice')
         message = '出版年：' + str(year) + '\nISSN：' + str(ch)
-        instance = CiNii('articles', ch, year, year)
-        result = instance.search
+        instance = CiNii('articles', ch, year[0], year[0])
+        result = instance.search()
         self.params['msg'] = message
         self.params['form'] = ShigakuzasshiForm_articles(request.POST)
         return render(request, 'shigakuzasshi/index.html', self.params)
