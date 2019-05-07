@@ -18,7 +18,7 @@ from .utils import get_isbn_from_dict, get_journal_title_data, get_title_data, g
 >>>>>>> f3f2e2bc617cdffb8865c4a2011eb842658f5b06
 from time import sleep
 
-class CiNii:
+class CiNii(object):
     def __init__(self, resource_type, target_list, since, until):
         self.api_url_for_article = ARTICLE_API
         self.api_url_for_books = BOOK_API
