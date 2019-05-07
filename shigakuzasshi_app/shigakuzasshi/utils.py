@@ -63,7 +63,7 @@ def get_authors_data(src):
         authors_list = src['dc:creator']
         author_array = [author['@value'] for author in authors_list]
     elif src.get('dc:creator'):
-        author_array = [src.get('dc:creator')[0]]
+        author_array = [src.get('dc:creator')]
     else:
         author_array = []
     authors = '・'.join(author_array)
@@ -74,16 +74,14 @@ def get_authors_data(src):
     return authors
 
 
-def modify_author_data(authors):
-
-    return authors
-
-
 def get_journal_title_data(src):
-    if isinstance(src.get('prism:publicationName'), list):
-        j_title = src['prism:publicationName'][0]['@value']
+    if src.get('prism:publicationName'):
+        if isinstance(src.get('prism:publicationName'), list):
+            j_title = src['prism:publicationName'][0]['@value']
+        else:
+            j_title = src['prism:publicationName']
     else:
-        j_title = src['prism:publicationName']
+        j_title = ""
 
     if j_title and '=' in j_title:
         split_j_title = j_title.split('=')

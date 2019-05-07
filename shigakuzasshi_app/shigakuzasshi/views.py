@@ -59,7 +59,6 @@ class ShigakuzasshiView_books(TemplateView):
             'form': ShigakuzasshiForm_books(),
             'goto': 'articles',
             'top': 'books',
-            'output': '検索結果'
         }
 
     def get(self, request):
@@ -72,6 +71,6 @@ class ShigakuzasshiView_books(TemplateView):
         instance = CiNii('books', ch, year[0], year[0])
         result = instance.search()
         self.params['msg'] = message
-        self.params['form'] = ShigakuzasshiForm_books(request.POST)
-        self.params['output'] = result
+        self.params['form'] = ShigakuzasshiForm_articles(request.POST)
+        self.params['result'] = result
         return render(request, 'shigakuzasshi/index.html', self.params)
