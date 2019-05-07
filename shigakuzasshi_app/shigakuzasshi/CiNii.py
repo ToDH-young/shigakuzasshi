@@ -23,7 +23,7 @@ class CiNii:
 
     def search(self):
         item_list = []
-        # url生成、ここではtarget_listにissnが格納されていると考える。
+        # url生成、ここではtarget_listに論文の場合issn、書籍の場合出版社名が格納されているとする
         for item in self.target_list:
             if self.resource_type == 'articles':
                 url = f"{self.api_url_for_article}issn={item}&year_from={self.since}&year_to={self.until}&{self.result_format}"
