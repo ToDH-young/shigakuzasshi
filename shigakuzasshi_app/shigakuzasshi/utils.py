@@ -78,7 +78,7 @@ def modify_author_data(authors):
 
 def get_journal_title_data(src):
     j_title = src['prism:publicationName'][0]['@value']
-    if '=' in j_title:
+    if j_title and '=' in j_title:
         split_j_title = j_title.split('=')
         j_title_complete = split_j_title[0]
     else:
@@ -139,6 +139,19 @@ def get_isbn_from_dict(src):
     else:
         return ""
 
+
+def formatting_article_object(result):
+    t = "\t"
+    result = f'""{t}""{t}{result["authors"]}{t}""{t}{result["title"]}{t}{result["journal_title"]}{t}{result["volume"]} \
+        {t}{result["startPage"]}-{result["endPage"]}{t}{result["year_month"]}'
+    return result
+
+
+def formatting_book_object(result):
+    t = "\t"
+    result = f'""{t}""{t}{result["authors"]}{t}""{t}{result["title"]}{t}""{t}{result["publisher"]}{t}\
+        {result["year_month"]}{t}""{t}""{t}""{t}""{t}""{t}{result["isbn"]}'
+    return result
 
 #def isbn_check():
 #    past_data = open(sys.argv[2], mode='r', encoding='utf-8')
