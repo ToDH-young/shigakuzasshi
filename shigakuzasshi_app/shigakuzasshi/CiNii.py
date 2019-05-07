@@ -13,7 +13,7 @@ from .utils import fetch_and_convert_json_to_dict, formatting_book_object, forma
 from .utils import get_isbn_from_dict, get_journal_title_data, get_title_data, get_article_volume, get_published_date_data
 from time import sleep
 
-class CiNii:
+class CiNii(object):
     def __init__(self, resource_type, target_list, since, until):
         self.api_url_for_article = ARTICLE_API
         self.api_url_for_books = BOOK_API
