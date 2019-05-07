@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import ShigakuzasshiForm_articles, ShigakuzasshiForm_books
 from django.views.generic import TemplateView
+from .CiNii import CiNii
 
 '''
 def index(request):
@@ -41,6 +42,8 @@ class ShigakuzasshiView_articles(TemplateView):
         year = request.POST.getlist('year')
         ch = request.POST.getlist('choice')
         message = '出版年：' + str(year) + '\nISSN：' + str(ch)
+        instance = CiNii('articles', ch, year, year)
+        result = instance.search
         self.params['msg'] = message
         self.params['form'] = ShigakuzasshiForm_articles(request.POST)
         return render(request, 'shigakuzasshi/index.html', self.params)
