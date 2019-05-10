@@ -13,3 +13,8 @@ h1 {
 p {
     margin:10px;
 }
+
+.result_body {
+    color:black;
+    font-size:10pt
+}

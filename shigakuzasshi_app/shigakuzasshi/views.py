@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import ShigakuzasshiForm_articles, ShigakuzasshiForm_books
 from django.views.generic import TemplateView
+from .CiNii import CiNii
 
 '''
 def index(request):
@@ -41,8 +42,37 @@ class ShigakuzasshiView_articles(TemplateView):
         year = request.POST.getlist('year')
         ch = request.POST.getlist('choice')
         message = '出版年：' + str(year) + '\nISSN：' + str(ch)
+        instance = CiNii('articles', ch, year[0], year[0])
+        result = instance.search()
         self.params['msg'] = message
         self.params['form'] = ShigakuzasshiForm_articles(request.POST)
+        self.params['result'] = result
+        return render(request, 'shigakuzasshi/index.html', self.params)
+
+
+class ShigakuzasshiView_books(TemplateView):
+
+    def __init__(self):
+        self.params = {
+            'title': '文献検索アプリ:書籍用',
+            'msg': '情報を入力してください',
+            'form': ShigakuzasshiForm_books(),
+            'goto': 'articles',
+            'top': 'books',
+        }
+
+    def get(self, request):
+        return render(request, 'shigakuzasshi/index.html', self.params)
+
+    def post(self, request):
+        year = request.POST.getlist('year')
+        ch = request.POST.getlist('choice')
+        message = '出版年：' + str(year) + '\npublisher：' + str(ch)
+        instance = CiNii('books', ch, year[0], year[0])
+        result = instance.search()
+        self.params['msg'] = message
+        self.params['form'] = ShigakuzasshiForm_articles(request.POST)
+<<<<<<< HEAD
         return render(request, 'shigakuzasshi/index.html', self.params)
 
 
@@ -66,5 +96,7 @@ class ShigakuzasshiView_books(TemplateView):
         message = '出版年：' + str(year) + '\npublisher：' + str(ch)
         self.params['msg'] = message
         self.params['form'] = ShigakuzasshiForm_books(request.POST)
+=======
+        self.params['result'] = result
+>>>>>>> develop
         return render(request, 'shigakuzasshi/index.html', self.params)
-    
