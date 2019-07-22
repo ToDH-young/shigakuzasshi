@@ -1,5 +1,3 @@
-# C:/Users/tom/anaconda3/python
-# coding: utf-8
 
 """
 #全体の目的
