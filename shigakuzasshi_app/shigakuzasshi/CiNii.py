@@ -10,8 +10,8 @@ formattingではjsonを渡して整形、それをマッピングし返す
 
 from .config import PUBLISHERS, ARTICLE_API, BOOK_API
 from .utils import fetch_and_convert_json_to_dict, formatting_book_object, formatting_article_object, get_authors_data
-from .utils import get_isbn_from_dict, get_journal_title_data, get_title_data, get_article_volume, get_published_date_data
-from .utils import get_start_page, get_end_page
+from .utils import get_isbn_from_dict, get_journal_title_data, get_title_data, get_article_volume
+from .utils import get_start_page, get_end_page, get_published_date_data
 from time import sleep
 
 class CiNii(object):
