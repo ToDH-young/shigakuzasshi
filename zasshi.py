@@ -26,7 +26,7 @@ from time import sleep
 #keys_list = ws.col_values(1)
 # key_value_dict = dict(zip(keys_list, values_list))
 
-# print(issn_list)
+
 # issn_list = ['0385-4841', '0288-1802', '0389-3138', '0447-9114', '0491-3329', '1346-7182', '0563-8186', '1884-1732', '0386-8729', '1348-2793']
 
 
@@ -39,9 +39,6 @@ for issn in issn_file:
     url = f"http://ci.nii.ac.jp/opensearch/search?issn={issn}&year_from=2019&format=json"
     url_list.append(url)
 
-print("issn読み込み完了")
-
-# print(url_list)
 
 result_file = open('総図地下+史編+法図+文図+西洋史+東文研.txt', mode='a', encoding='utf-8')
 
@@ -53,8 +50,8 @@ def get_article_title_from_dict(json_dict):
     return title
 
 
-def get_atricle_published_year_month(json_dict):
-    date = json_dict['prism:publicationDate'] if len(json_dict['@graph']) > 0 and 'prism:publicationDate' in json_dict['@graph'][0] else ''
+def get_article_published_year_month(json_dict):
+    date = json_dict['prism:publicationDate'] if 'prism:publicationDate' in json_dict else '取得失敗'
     return date
 
 
@@ -62,12 +59,17 @@ def get_article_authors(json_dict):
     if 'dc:creator' in json_dict.keys():
         authors = json_dict['dc:creator'][0][0]['@value']
     else:
-        authors = '------'
+        authors = '取得失敗'
     return authors
 
 
 def get_journal_title(json_dict):
-    j_title = json_dict['prism:publicationName'][0]['@value']
+    if 'prism:publicationName' in json_dict:
+        j_title = json_dict['prism:publicationName'][0]['@value']
+    elif 'dc:title' in json_dict:
+        j_title = json_dict['dc:title'][0]['@value']
+    else:
+        j_title = "タイトル取得失敗"
     return j_title
 
 
@@ -75,7 +77,7 @@ def get_article_volume(json_dict):
     if 'prism:number' in json_dict.keys():
         volume = json_dict['prism:number']
     else:
-        volume = '------'
+        volume = '取得失敗'
     return volume
 
 
@@ -83,7 +85,7 @@ def get_start_page(json_dict):
     if 'prism:startingPage' in json_dict.keys():
         startingpage = json_dict['prism:startingPage']
     else:
-        startingpage = '------'
+        startingpage = '取得失敗'
     return startingpage
 
 
@@ -91,7 +93,7 @@ def get_end_page(json_dict):
     if 'prism:endingPage' in json_dict.keys():
         endingpage = json_dict['prism:endingPage']
     else:
-        endingpage = '------'
+        endingpage = '取得失敗'
     return endingpage
 
 
@@ -104,7 +106,11 @@ def get_urls_from_json_dict(json_dict):
             article_url = dictionary['rdfs:seeAlso']['@id']
             urls.append(article_url)
     else:
-        pass
+        site_id = json_dict['@id']
+        target_pattern = r'(?<=issn=).*(?=&year)'
+        failed_issn = target_pattern.match(target_pattern, site_id).group()
+        message = f'以下の雑誌の記事の取得に失敗しました: issn={failed_issn}'
+        result_file.write(message)
     return urls
 
 
@@ -164,7 +170,7 @@ def fetch_and_convert_article_json_to_dict(url):
     article_dict['volume'] = get_article_volume(target_dict)
     article_dict['startPage'] = get_start_page(target_dict)
     article_dict['endPage'] = get_end_page(target_dict)
-    article_dict['year_month'] = get_atricle_published_year_month(target_dict)
+    article_dict['year_month'] = get_article_published_year_month(target_dict)
 
     return article_dict
 
@@ -172,15 +178,14 @@ journal_number = 1
 for i in range(len(url_list)):
     sleep(2)
     jd = fetch_and_convert_json_to_dict(url_list[i])
-    article_urls = get_urls_from_json_dict(jd)
-    # print(article_urls)
+    print(jd)
+    article_urls = get_urls_from_json_dict(jd['@graph'][0])
 
     for article_url in article_urls:
         article_dict = fetch_and_convert_article_json_to_dict(article_url)
         # json_dict = fetch_and_convert_json_to_dict(article_dict)
 
         authors = modify_authors_data(article_dict['authors'])
-        print(authors)
         title = modify_title_data(article_dict['article_title'])
         journal_title = modify_journal_title(article_dict['journal_title'])
         volume = article_dict['volume']
