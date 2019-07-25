@@ -24,7 +24,7 @@ ws = wb.worksheet("総図地下+史編+法図+文図+西洋史+東文研")
 
 issn_list = ws.col_values(2)
 keys_list = ws.col_values(1)
-key_value_dict = dict(zip(keys_list, values_list))
+# key_value_dict = dict(zip(keys_list, values_list))
 
 
 # issn_list = ['0385-4841', '0288-1802', '0389-3138', '0447-9114', '0491-3329', '1346-7182', '0563-8186', '1884-1732', '0386-8729', '1348-2793']
