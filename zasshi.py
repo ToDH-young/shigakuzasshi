@@ -12,29 +12,27 @@ from typing import Any
 from time import sleep
 
 # APIを用いて、google spreadsheetからISSNのリストを作成　※apiproject~~のjsonファイルを用意する
-#json_key = json.load(open('apiproject-9ead6aae00b0.json'))
-#scope = ['http://spreadsheets.google.com/feeds']
-#credentials = oauth2client.client.SignedJwtAssertionCredentials(json_key['client_email'],
- #                                                               json_key['private_key'].encode(), scope)
-#gc = gspread.authorize(credentials)
+json_key = json.load(open('apiproject-9ead6aae00b0.json'))
+scope = ['http://spreadsheets.google.com/feeds']
+credentials = oauth2client.client.SignedJwtAssertionCredentials(json_key['client_email'],
+                                                               json_key['private_key'].encode(), scope)
+gc = gspread.authorize(credentials)
 
-#wb = gc.open_by_url(
-#    "https://docs.google.com/spreadsheets/d/10JhDeGJgsAf_2jDjdTpKJy60Zc6EanrJsPj8141FH4c/edit#gid=1968944433")
-#ws = wb.worksheet("総図地下+史編+法図+文図+西洋史+東文研")
+wb = gc.open_by_url(
+    "https://docs.google.com/spreadsheets/d/10JhDeGJgsAf_2jDjdTpKJy60Zc6EanrJsPj8141FH4c/edit#gid=1968944433")
+ws = wb.worksheet("総図地下+史編+法図+文図+西洋史+東文研")
 
-#issn_list = ws.col_values(2)
-#keys_list = ws.col_values(1)
-# key_value_dict = dict(zip(keys_list, values_list))
+issn_list = ws.col_values(2)
+keys_list = ws.col_values(1)
+key_value_dict = dict(zip(keys_list, values_list))
 
 
 # issn_list = ['0385-4841', '0288-1802', '0389-3138', '0447-9114', '0491-3329', '1346-7182', '0563-8186', '1884-1732', '0386-8729', '1348-2793']
 
 
-issn_file = open('sample_tsv201907.tsv', mode='r', encoding='utf-8')
-
 # ISSNのリストをもとに、URLを自動生成する。
 url_list = []
-for issn in issn_file:
+for issn in issn_list:
     issn = issn.strip()
     url = f"http://ci.nii.ac.jp/opensearch/search?issn={issn}&year_from=2019&format=json"
     url_list.append(url)
