@@ -90,15 +90,12 @@ result_file = open("books_july20192.txt", mode='a', encoding='utf-8')
 # メインの作業で使う関数を定義する
 # それぞれに対しURLを作成、出版社とURLを対応させた辞書にする関数を作成
 def make_publisher_dict(publisher_list):
-    url_format = "https://ci.nii.ac.jp/books/opensearch/search?publisher={publisher}&year_from=2019&q=&format=json"
-    url_dict = {publisher: url_format.format(publisher=publisher) for publisher in publisher_list}
-    return url_dict
-
     url_dict = {}
     for publisher in publisher_list:
-        publisher_url = url_format.format(publisher=publisher)
+        publisher_url = f"https://ci.nii.ac.jp/books/opensearch/search?publisher={publisher}&year_from=2019&q=&format=json"
         url_dict[publisher] = publisher_url
-        return url_dict
+
+    return url_dict
 
 
 # レスポンスからjsonのディクショナリーを生成する関数を作成
@@ -109,16 +106,16 @@ def fetch_json_convert_to_dict(url):
 
 
 # 任意のJSONから生成されたディクショナリーから各書籍のJSON表記ページのURLを取得する関数を作成
-def get_urls_from_json_dict(jd):
+def get_urls_from_json_dict(jd, publisher):
     urls = []
     books = jd['@graph'][0]
     if 'items' in books.keys():
         books = books['items']
         for book in books:
-            book_url = book['rdfs:seeAlso']['@id'] if ['id '] in book['rdfs:seeAlso'] else ""
+            book_url = book['rdfs:seeAlso']['@id'] if 'id' in book['rdfs:seeAlso'] else ""
             urls.append(book_url)
     else:
-        pass
+        result_file.write(f'{publisher}の書籍の取得に失敗しました')
     return urls
 
 
@@ -180,8 +177,11 @@ def modify_date_data(date_data):
 # ISBNを取得する関数を作成。
 def get_isbn_from_dict(raw_isbn):
     if 'dcterms:hasPart' in raw_isbn.keys():
-        raw_isbn = raw_isbn['dcterms:hasPart'][0]['@id'] if "@id" in raw_isbn['dcterms:hasPart'][0] else ""
-        isbn_data = raw_isbn.replace('urn:isbn:', '') if raw_isbn != "" else ""
+        raw_isbn = raw_isbn['dcterms:hasPart'][0]['@id'] if "@id" in raw_isbn['dcterms:hasPart'][0] else "isbn:取得失敗"
+        if raw_isbn != "isbn:取得失敗":
+            isbn_data = raw_isbn.replace('urn:isbn:', '')
+        else:
+            isbn_data = raw_isbn
         return isbn_data
     else:
         return ""
@@ -211,7 +211,7 @@ def isbn_check():
 publisher_dict = make_publisher_dict(publisher_list)
 for publisher, publisher_url in publisher_dict.items():
     jd = fetch_json_convert_to_dict(publisher_url)
-    book_urls = get_urls_from_json_dict(jd)
+    book_urls = get_urls_from_json_dict(jd, publisher)
     # 各書籍のJSONファイルをディクショナリーに変換
     for book_url in book_urls:
         book_dict = fetch_json_convert_to_dict(book_url)
@@ -244,6 +244,7 @@ for publisher, publisher_url in publisher_dict.items():
             result_file.write('\n')
         else:
             pass
+        print(f'{publisher} finished')
 
 result_file.close()
 
