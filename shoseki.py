@@ -112,7 +112,7 @@ def get_urls_from_json_dict(jd, publisher):
     if 'items' in books.keys():
         books = books['items']
         for book in books:
-            book_url = book['rdfs:seeAlso']['@id'] if 'id' in book['rdfs:seeAlso'] else ""
+            book_url = book['rdfs:seeAlso']['@id'] if '@id' in book['rdfs:seeAlso'] else ""
             urls.append(book_url)
     else:
         result_file.write(f'{publisher}の書籍の取得に失敗しました')
