@@ -214,37 +214,41 @@ for publisher, publisher_url in publisher_dict.items():
     book_urls = get_urls_from_json_dict(jd, publisher)
     # 各書籍のJSONファイルをディクショナリーに変換
     for book_url in book_urls:
-        book_dict = fetch_json_convert_to_dict(book_url)
-        # book_dictは一冊分のJSONデータを元にした辞書型データ
+        try:
+            book_dict = fetch_json_convert_to_dict(book_url)
+            # book_dictは一冊分のJSONデータを元にした辞書型データ
 
-        book_data = book_dict['@graph'][0]
+            book_data = book_dict['@graph'][0]
 
-        raw_title = book_data['dc:title'][0]['@value']
-        title, subtitle = modify_title_data(raw_title)
-        # これでタイトルの文字列を取得できた
+            raw_title = book_data['dc:title'][0]['@value']
+            title, subtitle = modify_title_data(raw_title)
+            # これでタイトルの文字列を取得できた
 
-        raw_author = book_data
-        author = modify_author_data(raw_author)
-        # 著者を取得
+            raw_author = book_data
+            author = modify_author_data(raw_author)
+            # 著者を取得
 
-        raw_date = book_data['dc:date']
-        date = modify_date_data(raw_date)
-        # 発行年月を取得
+            raw_date = book_data['dc:date']
+            date = modify_date_data(raw_date)
+            # 発行年月を取得
 
-        raw_isbn = book_data
-        isbn = get_isbn_from_dict(raw_isbn)
-        # ISBNを取得
+            raw_isbn = book_data
+            isbn = get_isbn_from_dict(raw_isbn)
+            # ISBNを取得
 
-        repetition = isbn_check()
+            repetition = isbn_check()
 
-        t = '\t'
-        result = f'""{t}""{t}{author}{t}""{t}{title}{t}{subtitle}{t}{publisher}{t}{date}{t}""{t}""{t}""{t}""{t}""{t}{isbn}'
-        if repetition == 0:
-            result_file.write(result)
+            t = '\t'
+            result = f'""{t}""{t}{author}{t}""{t}{title}{t}{subtitle}{t}{publisher}{t}{date}{t}""{t}""{t}""{t}""{t}""{t}{isbn}'
+            if repetition == 0:
+                result_file.write(result)
+                result_file.write('\n')
+            else:
+                pass
+            print(f'{publisher} finished')
+        except ConnectionError:
+            result_file.write(f'以下のURLについて通信に失敗しました。後ほど改めて試してください: {book_url}')
             result_file.write('\n')
-        else:
-            pass
-        print(f'{publisher} finished')
 
 result_file.close()
 
