@@ -107,7 +107,7 @@ def get_urls_from_json_dict(json_dict):
         site_id = json_dict['@id']
         target_pattern = r'\d{4}-\d{4}'
         failed_issn = re.search(target_pattern, site_id).group()
-        message = f'以下の雑誌の記事の取得に失敗しました: issn={failed_issn}'
+        message = f'以下の雑誌の記事の取得に失敗しました: issn={failed_issn}\n'
         result_file.write(message)
     return urls
 
