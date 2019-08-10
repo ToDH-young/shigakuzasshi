@@ -150,7 +150,6 @@ def modify_journal_title(j_title):
     return j_title_complete
 
 
-
 def fetch_and_convert_json_to_dict(url):
     response = requests.get(url)
     json_dictionary = json.loads(response.text)
@@ -172,6 +171,7 @@ def fetch_and_convert_article_json_to_dict(url):
 
     return article_dict
 
+
 journal_number = 1
 for i in range(len(url_list)):
     sleep(2)
@@ -180,22 +180,26 @@ for i in range(len(url_list)):
     article_urls = get_urls_from_json_dict(jd['@graph'][0])
 
     for article_url in article_urls:
-        article_dict = fetch_and_convert_article_json_to_dict(article_url)
-        # json_dict = fetch_and_convert_json_to_dict(article_dict)
+        try:
+            article_dict = fetch_and_convert_article_json_to_dict(article_url)
+            # json_dict = fetch_and_convert_json_to_dict(article_dict)
 
-        authors = modify_authors_data(article_dict['authors'])
-        title = modify_title_data(article_dict['article_title'])
-        journal_title = modify_journal_title(article_dict['journal_title'])
-        volume = article_dict['volume']
-        startPage = article_dict['startPage']
-        endPage = article_dict['endPage']
-        year_month = modify_published_year_month(article_dict['year_month'])
+            authors = modify_authors_data(article_dict['authors'])
+            title = modify_title_data(article_dict['article_title'])
+            journal_title = modify_journal_title(article_dict['journal_title'])
+            volume = article_dict['volume']
+            startPage = article_dict['startPage']
+            endPage = article_dict['endPage']
+            year_month = modify_published_year_month(article_dict['year_month'])
 
-        # result = fill_format_with_article_data(FORMAT_STRING, article_dict)
-        t = '\t'
-        result = f'""{t}""{t}{authors}{t}""{t}{title}{t}{journal_title}{t}{volume}{t}{startPage}-{endPage}{t}{year_month}'
-        result_file.write(result)
-        result_file.write('\n')
+            # result = fill_format_with_article_data(FORMAT_STRING, article_dict)
+            t = '\t'
+            result = f'""{t}""{t}{authors}{t}""{t}{title}{t}{journal_title}{t}{volume}{t}{startPage}-{endPage}{t}{year_month}'
+            result_file.write(result)
+            result_file.write('\n')
+        except ConnectionError:
+            result_file.write(f'以下のURLについて通信に失敗しました。後ほど改めて試してください: {article_url}')
+            result_file.write('\n')
     print(f'{journal_number} journal completed')
     journal_number += 1
 
